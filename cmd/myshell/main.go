@@ -32,14 +32,9 @@ func evaluate(input string){
 
 	output, ok := COMMANDS[command]
 	
-	fmt.Println(ok)
-	fmt.Println(command)
-	fmt.Println(optional)
-
 	if ok {
 		output(optional)		
 	} else {
-		fmt.Println(command)
 		fmt.Printf("%v: command not found\n", command)
 	}
 }
