@@ -4,7 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 )
 
 
@@ -39,20 +41,33 @@ func evaluate(input string){
 	}
 }
 
+
+
 func main() {
-	// You can use print statements as follows for debugging, they'll be visible when running tests.
-	// fmt.Println("Logs from your program will appear here!")
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	msg := make(chan string, 1)
 
-	// Uncomment this block to pass the first stage
-	fmt.Fprint(os.Stdout, "$ ")
 
-	// Wait for user input
-	input, err := bufio.NewReader(os.Stdin).ReadString('\n')
-	if err != nil {
-		fmt.Println("An error occured while reading input. Please try again.")
-		return
+	input: for {
+
+		fmt.Fprint(os.Stdout, "$ ")
+		input, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		if err != nil {
+			return
 	}
+		msg <- input
 
-	input = strings.Trim(input, "\n\r ")
-	evaluate(input)
+	loop: for {
+
+			select {
+			case <-sigs:
+				break input
+			case s := <-msg:
+				input = strings.Trim(s, "\n\r ")
+				evaluate(input)
+				break loop
+			}
+		}
+	}
 }
