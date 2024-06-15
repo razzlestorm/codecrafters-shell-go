@@ -14,6 +14,30 @@ var COMMANDS = map[string]func([]string){
 	"echo": echo,
 	"cd": cd,
 	"exit": exit,
+	"type": cmd_type,
+}
+
+var COMMAND_NAMES = []string {
+	"cd",
+	"echo",
+	"exit",
+	"type",
+}
+
+func cmd_type(input []string) {
+	if len(input) < 1 {
+		fmt.Println("not enough arguments for type.")
+	}
+
+	command := strings.Join(input, "") 
+	for _, element := range COMMAND_NAMES {
+		if element == command {
+		fmt.Printf("%v is a shell builtin\n", command)
+		return
+		}
+	}
+	fmt.Printf("%v: not found\n", command)
+
 }
 
 func cd(input []string){
