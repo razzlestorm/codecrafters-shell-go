@@ -26,6 +26,7 @@ func echo(input []string){
 	if len(input) < 1 {
 		fmt.Println("not enough arguments for echo.")
 	}
+	fmt.Println(strings.Join(input, " "))
 }
 
 func exit(input []string){
