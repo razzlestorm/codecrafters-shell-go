@@ -13,6 +13,13 @@ import (
 var COMMANDS = map[string]func([]string){
 	"echo": echo,
 	"cd": cd,
+	"exit": exit,
+}
+
+func cd(input []string){
+	if len(input) < 1 {
+		fmt.Println("not enough arguments for cd.")
+	}
 }
 
 func echo(input []string){
@@ -21,9 +28,11 @@ func echo(input []string){
 	}
 }
 
-func cd(input []string){
-	if len(input) < 1 {
-		fmt.Println("not enough arguments for cd.")
+func exit(input []string){
+	if strings.Join(input, "") != "0" {
+		os.Exit(1)
+	} else {
+		os.Exit(0)
 	}
 }
 
@@ -36,6 +45,8 @@ func evaluate(input string){
 	
 	if ok {
 		output(optional)		
+	} else if input == "" {
+
 	} else {
 		fmt.Printf("%v: command not found\n", command)
 	}
@@ -58,15 +69,16 @@ func main() {
 	}
 		msg <- input
 
-	loop: for {
+		post: for {
 
 			select {
 			case <-sigs:
 				break input
+
 			case s := <-msg:
 				input = strings.Trim(s, "\n\r ")
 				evaluate(input)
-				break loop
+				break post
 			}
 		}
 	}
