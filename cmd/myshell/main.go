@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
-	"github.com/razzlestorm/codecrafters-shell-go/cmd/myshell/commands"
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/commands"
 )
 
 var commandlist *commands.CommandHandler
@@ -54,7 +54,7 @@ func main() {
 
 			case s := <-msg:
 				input = strings.Trim(s, "\n\r ")
-				evaluate(input, &commandlist)
+				evaluate(input, commandlist)
 				break post
 			}
 		}
