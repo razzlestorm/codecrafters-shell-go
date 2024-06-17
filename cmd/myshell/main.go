@@ -7,66 +7,17 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"github.com/razzlestorm/codecrafters-shell-go/cmd/myshell/commands"
 )
 
+var commandlist *commands.CommandHandler
 
-var COMMANDS = map[string]func([]string){
-	"echo": echo,
-	"cd": cd,
-	"exit": exit,
-	"type": cmd_type,
-}
-
-var COMMAND_NAMES = []string {
-	"cd",
-	"echo",
-	"exit",
-	"type",
-}
-
-func cmd_type(input []string) {
-	if len(input) < 1 {
-		fmt.Println("not enough arguments for type.")
-	}
-
-	command := strings.Join(input, "") 
-	for _, element := range COMMAND_NAMES {
-		if element == command {
-		fmt.Printf("%v is a shell builtin\n", command)
-		return
-		}
-	}
-	fmt.Printf("%v: not found\n", command)
-
-}
-
-func cd(input []string){
-	if len(input) < 1 {
-		fmt.Println("not enough arguments for cd.")
-	}
-}
-
-func echo(input []string){
-	if len(input) < 1 {
-		fmt.Println("not enough arguments for echo.")
-	}
-	fmt.Println(strings.Join(input, " "))
-}
-
-func exit(input []string){
-	if strings.Join(input, "") != "0" {
-		os.Exit(1)
-	} else {
-		os.Exit(0)
-	}
-}
-
-func evaluate(input string){
+func evaluate(input string, comms *commands.CommandHandler){
 	args := strings.Split(input, " ")
 	
 	command, optional := args[0], args[1:]
 
-	output, ok := COMMANDS[command]
+	output, ok := comms.Commands[command]
 	
 	if ok {
 		output(optional)		
@@ -84,6 +35,7 @@ func main() {
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 	msg := make(chan string, 1)
 
+	commandlist = commands.NewCommandHandler()
 
 	input: for {
 
@@ -102,7 +54,7 @@ func main() {
 
 			case s := <-msg:
 				input = strings.Trim(s, "\n\r ")
-				evaluate(input)
+				evaluate(input, &commandlist)
 				break post
 			}
 		}
