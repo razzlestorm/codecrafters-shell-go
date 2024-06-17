@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
-	"github.com/razzlestorm/codecrafters-shell-go/cmd/myshell/commands"
+	"github.com/razzlestorm/codecrafters-shell-go/commands"
 )
 
 var commandlist *commands.CommandHandler
