@@ -46,14 +46,14 @@ func (c *CommandHandler) cmd_type(input []string) {
 			dirs := strings.Split(path, ":")
 			// fmt.Println(dirs)
 			for _, entry := range dirs {
-				// fmt.Println(entry)
+				fmt.Println(entry)
 				files, err := os.ReadDir(entry)
 				if err != nil {
 					fmt.Printf("%v: not found\n", command)
 					return
 				}
 				for _, file := range files {
-					// fmt.Println(file.Name())
+					fmt.Println(file.Name())
 					if file.Name() == command {
 						fmt.Printf("%v is %v\n", command, entry)
 						return
