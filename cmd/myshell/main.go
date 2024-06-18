@@ -35,7 +35,7 @@ func main() {
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 	msg := make(chan string, 1)
 
-	commandlist = commands.NewCommandHandler()
+	commandlist := commands.NewCommandHandler()
 
 	input: for {
 
