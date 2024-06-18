@@ -1,8 +1,10 @@
 package commands
 
 import (
+	"filepath"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -45,21 +47,15 @@ func (c *CommandHandler) cmd_type(input []string) {
 		} else {
 			dirs := strings.Split(path, ":")
 			for _, entry := range dirs {
-				files, err := os.ReadDir(entry)
-				if err != nil {
-					continue
+				exec_path := filepath.Join(entry, command)
+				if _, err := os.Stat(exec_path); err == nil {
+					fmt.Printf("%v is %v/%v\n", command, entry, command)
 				}
-				for _, file := range files {
-					if file.Name() == command {
-						fmt.Printf("%v is %v/%v\n", command, entry, command)
-						return
-					}
 				}
 			}
 			fmt.Printf("%v: not found\n", command)
 			return
 		}
-	}
 
 	fmt.Printf("%v is a shell builtin\n", command)
 	return
