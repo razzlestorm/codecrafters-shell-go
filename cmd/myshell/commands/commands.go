@@ -1,10 +1,9 @@
 package commands
 
 import (
-	"filepath"
+	"path/filepath"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
