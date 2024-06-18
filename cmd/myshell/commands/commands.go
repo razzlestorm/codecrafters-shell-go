@@ -51,7 +51,7 @@ func (c *CommandHandler) cmd_type(input []string) {
 				}
 				for _, file := range files {
 					if file.Name() == command {
-						fmt.Printf("%v is %v\n", command, entry)
+						fmt.Printf("%v is %v/%v\n", command, entry, command)
 						return
 					}
 				}
