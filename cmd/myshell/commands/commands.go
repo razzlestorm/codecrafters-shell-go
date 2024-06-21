@@ -49,6 +49,7 @@ func (c *CommandHandler) cmd_type(input []string) {
 				exec_path := filepath.Join(entry, command)
 				if _, err := os.Stat(exec_path); err == nil {
 					fmt.Printf("%v is %v/%v\n", command, entry, command)
+					return
 				}
 				}
 			}
