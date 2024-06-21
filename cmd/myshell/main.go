@@ -2,8 +2,10 @@ package main
 
 import (
 	"bufio"
+	"path/filepath"
 	"fmt"
 	"os"
+	"os/exec"
 	"os/signal"
 	"strings"
 	"syscall"
@@ -22,6 +24,32 @@ func evaluate(input string, comms *commands.CommandHandler){
 	if ok {
 		output(optional)		
 	} else if input == "" {
+
+	} else if command != "" {
+
+		path := os.Getenv("PATH")
+		if len(path) == 0 {
+			fmt.Printf("%v: not found\n", command)
+			return
+		} else {
+			dirs := strings.Split(path, ":")
+			for _, entry := range dirs {
+				exec_path := filepath.Join(entry, command)
+				if _, err := os.Stat(exec_path); err == nil {
+					cmd := exec.Command(exec_path, strings.Join(optional, " "))
+					out, err := cmd.Output()
+
+					if err != nil {
+						fmt.Printf("%v returned an error: %v", command, err)
+						return
+					}
+					fmt.Printf("%s\n", strings.Trim(string(out), "\n\r "))
+					return
+				}
+				}
+			}
+			fmt.Printf("%v: not found\n", command)
+			return
 
 	} else {
 		fmt.Printf("%v: command not found\n", command)
