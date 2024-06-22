@@ -35,12 +35,11 @@ func (c *CommandHandler) pwd(input []string) {
 		fmt.Println("pwd expects no arguments, but some were passed.")
 		return
 	}
-	ex, err := os.Executable()
+	dir, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
-	exPath := filepath.Dir(ex)
-	fmt.Println(exPath)
+	fmt.Println(dir)
 }
 
 
