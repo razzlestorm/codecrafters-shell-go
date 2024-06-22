@@ -25,13 +25,29 @@ func (c *CommandHandler) initCommands() {
 	c.Commands["echo"] = c.echo
 	c.Commands["exit"] = c.exit
 	c.Commands["type"] = c.cmd_type
+	c.Commands["pwd"] = c.pwd
 
+}
+
+
+func (c *CommandHandler) pwd(input []string) {
+	if len(input) > 1 {
+		fmt.Println("pwd expects no arguments, but some were passed.")
+		return
+	}
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exPath := filepath.Dir(ex)
+	fmt.Println(exPath)
 }
 
 
 func (c *CommandHandler) cmd_type(input []string) {
 	if len(input) < 1 {
 		fmt.Println("not enough arguments for type.")
+		return
 	}
 
 	command := strings.Join(input, "") 
