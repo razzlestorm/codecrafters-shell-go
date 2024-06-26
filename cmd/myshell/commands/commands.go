@@ -43,15 +43,22 @@ func (c *CommandHandler) cd(input []string) {
 		fmt.Println("cd only takes one argument, which should be a filepath.")
 		return
 	} else {
-	// curr, _ := os.Getwd()
+	curr, _ := os.Getwd()
 	path := strings.Trim(input[0], "\n\r ")
-	// err := os.Chdir(filepath.Join(curr, path))
-	err := os.Chdir(path)
-	if err != nil {
-		fmt.Printf("cd: %v: No such file or directory\n", path)
-		return
+	if strings.HasPrefix(path, "/") || strings.HasPrefix(path, "\\") { // absolute
+		err := os.Chdir(path)
+		if err != nil {
+			fmt.Printf("cd: %v: No such file or directory\n", path)
+			return
+	} else {
+		err := os.Chdir(filepath.Join(curr, path))
+		if err != nil {
+			fmt.Printf("cd: %v: No such file or directory\n", path)
+			return
+		}
 	}
 	return
+	}
 	}
 }
 
