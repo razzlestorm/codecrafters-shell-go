@@ -26,7 +26,33 @@ func (c *CommandHandler) initCommands() {
 	c.Commands["exit"] = c.exit
 	c.Commands["type"] = c.cmd_type
 	c.Commands["pwd"] = c.pwd
+	c.Commands["cd"] = c.cd
 
+}
+
+
+func (c *CommandHandler) cd(input []string) {
+	if len(input) < 1 {
+		dir, err := os.Getwd()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(dir)
+		return
+	} else if len(input) > 1 {
+		fmt.Println("cd only takes one argument, which should be a filepath.")
+		return
+	} else {
+	// curr, _ := os.Getwd()
+	path := strings.Trim(input[0], "\n\r ")
+	// err := os.Chdir(filepath.Join(curr, path))
+	err := os.Chdir(path)
+	if err != nil {
+		fmt.Printf("cd: %v: No such file or directory\n", path)
+		return
+	}
+	return
+	}
 }
 
 
@@ -40,6 +66,7 @@ func (c *CommandHandler) pwd(input []string) {
 		panic(err)
 	}
 	fmt.Println(dir)
+	return
 }
 
 
@@ -76,12 +103,6 @@ func (c *CommandHandler) cmd_type(input []string) {
 	return
 	}
 
-
-func (c *CommandHandler) cd(input []string){
-	if len(input) < 1 {
-		fmt.Println("not enough arguments for cd.")
-	}
-}
 
 func (c *CommandHandler) echo(input []string){
 	if len(input) < 1 {
