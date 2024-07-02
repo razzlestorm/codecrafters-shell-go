@@ -44,21 +44,16 @@ func (c *CommandHandler) cd(input []string) {
 		return
 	} else {
 	curr, _ := os.Getwd()
-	path := strings.Trim(input[0], "\n\r ")
-	if strings.HasPrefix(path, "/") || strings.HasPrefix(path, "\\") { // absolute
-		err := os.Chdir(path)
-		if err != nil {
-			fmt.Printf("cd: %v: No such file or directory\n", path)
-			return
-	} else {
-		err := os.Chdir(filepath.Join(curr, path))
-		if err != nil {
-			fmt.Printf("cd: %v: No such file or directory\n", path)
-			return
+	p := strings.Trim(input[0], "\n\r ")
+	if !filepath.IsAbs(p) {
+		p = (filepath.Join(curr, p))
 		}
-	}
+	err := os.Chdir(p)
+	if err != nil {
+		fmt.Printf("cd: %v: No such file or directory\n", p)
+		return
+		}
 	return
-	}
 	}
 }
 
