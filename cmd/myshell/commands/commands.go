@@ -45,6 +45,7 @@ func (c *CommandHandler) cd(input []string) {
 	} else {
 	curr, _ := os.Getwd()
 	p := strings.Trim(input[0], "\n\r ")
+	p = strings.Replace(p, "~", os.Getenv("HOME"), 1)
 	if !filepath.IsAbs(p) {
 		p = (filepath.Join(curr, p))
 		}
