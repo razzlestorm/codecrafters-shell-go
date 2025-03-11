@@ -15,8 +15,8 @@ import (
 var commandlist *commands.CommandHandler
 
 func evaluate(input string, comms *commands.CommandHandler){
-	args := strings.Split(input, " ")
-	
+	// if there are quotes in the input, we want to treat everything in the quotes as one argument
+	args := strings.Split(strings.ReplaceAll(input, "'", ""), " ")
 	command, optional := args[0], args[1:]
 
 	output, ok := comms.Commands[command]
