@@ -2,15 +2,16 @@ package main
 
 import (
 	"bufio"
-	"path/filepath"
 	"fmt"
 	"os"
 	"os/exec"
 	"os/signal"
+	"path/filepath"
+	"regexp"
 	"strings"
 	"syscall"
+
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/commands"
-	"regexp"
 )
 
 var commandlist *commands.CommandHandler
@@ -26,9 +27,13 @@ func evaluate(input string, comms *commands.CommandHandler){
 	args := argparser(input);
 	command, optional := args[0], args[1:]
 	unsplit := strings.Join(optional, " ")
-	r, _ := regexp.Compile("'(.+)'*")
+	// probably don't use regex as multiple quotes lead to problems
+	r, _ := regexp.Compile("'(.+)'")
 	matches := r.FindAllString(unsplit, -1)
 	if len(matches) > 0 {
+		for i, s := range matches {
+			matches[i] = strings.Trim(s, "'")
+		}
 		optional = matches
 	}
 
