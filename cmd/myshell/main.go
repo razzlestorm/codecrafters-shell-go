@@ -35,6 +35,8 @@ func evaluate(input string, comms *commands.CommandHandler){
 			matches[i] = strings.Trim(s, "'")
 		}
 		optional = matches
+	} else {
+		optional = []string{unsplit}
 	}
 
 	output, ok := comms.Commands[command]
