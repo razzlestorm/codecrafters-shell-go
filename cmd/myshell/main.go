@@ -10,14 +10,27 @@ import (
 	"strings"
 	"syscall"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/commands"
+	"regexp"
 )
 
 var commandlist *commands.CommandHandler
 
+func argparser(input string) []string {
+	args := strings.Split(input, " ")
+	
+	return args
+}
+
 func evaluate(input string, comms *commands.CommandHandler){
 	// if there are quotes in the input, we want to treat everything in the quotes as one argument
-	args := strings.Split(strings.ReplaceAll(input, "'", ""), " ")
+	args := argparser(input);
 	command, optional := args[0], args[1:]
+	unsplit := strings.Join(optional, " ")
+	r, _ := regexp.Compile("'(.+)'*")
+	matches := r.FindAllString(unsplit, -1)
+	if len(matches) > 0 {
+		optional = matches
+	}
 
 	output, ok := comms.Commands[command]
 	
