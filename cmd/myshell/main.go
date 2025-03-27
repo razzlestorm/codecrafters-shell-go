@@ -36,6 +36,7 @@ func evaluate(input string, comms *commands.CommandHandler){
 		}
 		optional = matches
 	} else {
+		// need to trim whitespace
 		optional = []string{unsplit}
 	}
 
